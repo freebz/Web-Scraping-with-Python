@@ -1,0 +1,39 @@
+<!-- CHAPTER 10 자바스크립트 스크레이핑 -->
+
+<script>
+  alert("This creates a popup-using JavaScript");
+</script>
+
+
+
+<!-- 10.1 자바스크립트에 관한 간단한 소개 -->
+
+<script>
+  function fibonacci(a, b) {
+    var nextNum = a + b;
+    console.log(nextNum+" is in the Fibonacci sequence");
+    if (nextNum < 100) {
+      fibonacci(b, nextNum);
+    }
+  }
+  fibonacci(1, 1);
+</script>
+
+
+
+<script>
+  var fibonacci = function() {
+    var a = 1;
+    var b = 1;
+    return function () {
+      var temp = b;
+      b = a + b;
+      a = temp;
+      return b;
+    }
+  }
+  var fibInstance = fibonacci();
+  console.log(fibInstance()+" is in the Fibonacci sequence");
+  console.log(fibInstance()+" is in the Fibonacci sequence");
+  console.log(fibInstance()+" is in the Fibonacci sequence");
+</script>
