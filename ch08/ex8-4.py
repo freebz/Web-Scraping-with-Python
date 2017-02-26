@@ -4,7 +4,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import pymysql
 
-conn = pymysql.connect(host='127.0.0.1', db='mysql', charset='utf8')
+conn = pymysql.connect(host='127.0.0.1', charset='utf8')
 cur = conn.cursor()
 cur.execute("USE wikipedia")
 
@@ -32,4 +32,25 @@ def searchDepth(targetPageId, currentPageId, linkTree, depth):
         return linkTree
     if not linkTree:
         linkTree = constructDict(currentPageId)
-        if not link
+        if not linkTree:
+            # 링크가 발견되지 않았으므로 이 노드에서는 계속할 수 없습니다.
+            return {}
+    if targetPageId in linkTree.keys():
+        print("TARGET "+str(targetPageId)+" FOUND!")
+        raise SolutionFound("PAGE: "+str(currentPageId))
+
+    for branchKey, branchValue in linkTree.items():
+        try:
+            # 재귀적으로 돌아와서 링크 트리를 구축합니다.
+            linkTree[branchKey] = searchDepth(targetPageId, branchKey,
+                                              branchValue, depth-1)
+        except SolutionFound as e:
+            print(e.message)
+            raise SolutionFound("PAGE: "+str(currentPageId))
+    return linkTree
+
+try:
+    searchDepth(134951, 1, {}, 4)
+    print("No solution found")
+except SolutionFound as e:
+    print(e.message)
